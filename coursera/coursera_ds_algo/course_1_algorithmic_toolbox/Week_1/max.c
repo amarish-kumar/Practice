@@ -9,7 +9,9 @@
     of these two numbers is the answer. Another way
     is to sort this set and use the last two numbers
     but when the answer can be achieved without sorting
-    why take the pain.
+    why take the pain. This implementation simply finds
+    the two largest numbers in the input and returns
+    their product.
 */
 
 #include <stdio.h>
@@ -46,9 +48,10 @@ void main(){
 /** @brief
     Given an array, finds the pair having the maximum
     product.
-    @param
+    @param1
     The array containing n numbers.
-
+    @param2
+    Size of the array.
     @return
     The maximum product possible from all the possible
     pairs.
@@ -56,22 +59,26 @@ void main(){
 long long findMaxProduct(int *p,int n){
 
     long long result=-1;
-    int outerLoopCounter;
-    int innerLoopCounter;
-    long long currentProduct;
-
-    for(outerLoopCounter=0;outerLoopCounter<n;outerLoopCounter++){
+    int loopCounter = 0;
+    long long largest = -1;
+    long long secondLargest = -1;
     
-        for(innerLoopCounter=outerLoopCounter+1;innerLoopCounter<n;innerLoopCounter++){
 
-            //find the product of the current pair.
-            currentProduct = (((long long)*(p+outerLoopCounter)) * ((long long)*(p+innerLoopCounter)));
-            if (result < currentProduct ){
-            //largest product yet found, assign to result.
-            result =  currentProduct;
-            }
+    //Parse the array and determine the two largest numbers.
+    for( ; loopCounter < n; loopCounter++ ){
+
+        //If number at current is largest yet encountered.
+        if( p[loopCounter] > largest){
+            secondLargest = largest;
+            largest = p[loopCounter];
+        }
+        else if(p[loopCounter] > secondLargest){
+            secondLargest = p[loopCounter];
+        } else{
+            continue;
         }
     }
+    result = largest * secondLargest;
     //return the max product.
     return result;
 }
