@@ -1,5 +1,5 @@
 /** Implementation of the longest subsequence problem
-    from geek for geeks(http://www.geeksforgeeks.org/
+    from geeks for geeks(http://www.geeksforgeeks.org/
     dynamic-programming-set-3-longest-increasing-subsequence/).
   */
 
@@ -58,6 +58,9 @@ int calcLS(int *sequence, int sizeOfSequence){
     int *subsequenceLength = NG;
     //Loop Counter.
     int loopCounter = NG;
+    //Inner loop counter, this is used in case the previous
+    //element in sequence is greater than current element.
+    int innerLoopCounter = NG;
 
     //Allocate memory for the subsequence length array.
     subsequenceLength = (int*) malloc( sizeOfSequence * sizeof(int*));
@@ -71,12 +74,19 @@ int calcLS(int *sequence, int sizeOfSequence){
     for(loopCounter = ONE; loopCounter < sizeOfSequence; loopCounter++){
 
         //If previous element is smaller, increase subsequence length.
-        if(sequence[loopCounter] < sequence[loopCounter -1]){
-            subsequenceLength[loopCounter] = subsequenceLength[loopCounter -1];
+        if(sequence[loopCounter] > sequence[loopCounter - ONE]){
+            subsequenceLength[loopCounter] = subsequenceLength[loopCounter - ONE] + ONE;
         }
-        //Else assign the same length as previous one.
+        //Else search for last smaller number and use it's subsequence length.
         else{
-            subsequenceLength[loopCounter] = subsequenceLength[loopCounter -1] + 1;
+            //Assign default value of 1 just in case no smaller element is found.
+            subsequenceLength[loopCounter] = ONE;
+            for(innerLoopCounter = loopCounter - ONE; innerLoopCounter >= ZERO; innerLoopCounter--){
+                //Check if element is smaller.
+                if(sequence[innerLoopCounter] < sequence[loopCounter]){
+                    subsequenceLength[loopCounter] = subsequenceLength[innerLoopCounter] + 1;
+                }
+            }
         }
         
         //Update the max length.
